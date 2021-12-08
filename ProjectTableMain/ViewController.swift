@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     let search = UISearchController(searchResultsController: nil)
     
     var arrayWorker: [Worker] = [Worker(name: "Anna", statusWorker: "junior"), Worker(name: "Anatolii", statusWorker: "master"), Worker(name: "Pavel", statusWorker: "junior"), Worker(name: "Sergei", statusWorker: "master"), Worker(name: "Slava", statusWorker: "midlle"), Worker(name: "Yaroslav", statusWorker: "junior")]
+    var arrayImage = ["5", "4", "7", "2", "1", "7"]
     
     
     var filterArrayWorker : [Worker] = []
@@ -56,7 +57,7 @@ class ViewController: UIViewController {
     
     func createButtonBar() {
         let buttonBar = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarItem))
-        navigationItem.leftBarButtonItem = buttonBar
+        navigationItem.rightBarButtonItem = buttonBar
     }
     
    @objc func addBarItem () {
@@ -79,6 +80,8 @@ extension ViewController:UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCell(withIdentifier: identifire, for: indexPath)
         cell = UITableViewCell(style: .subtitle, reuseIdentifier: identifire)
+        
+        
         var worker1 : Worker
             if isFitering {
                 worker1 = filterArrayWorker [indexPath.row]            }
@@ -86,10 +89,12 @@ extension ViewController:UITableViewDataSource, UITableViewDelegate {
             worker1 = arrayWorker [indexPath.row]
         }
         
-        
+        var imageView = arrayImage [indexPath.row]
         
         cell.textLabel?.text = worker1.name
         cell.detailTextLabel?.text = worker1.statusWorker
+        cell.imageView?.image = UIImage(named: imageView)
+        cell.accessoryType = .detailButton
         return cell
         
     }
@@ -98,7 +103,19 @@ extension ViewController:UITableViewDataSource, UITableViewDelegate {
         let firstVC = FirstViewController()
         navigationController?.pushViewController(firstVC, animated: true)
         firstVC.work = arrayWorker [indexPath.row]
+        firstVC.fotoWork = arrayImage [indexPath.row]
         
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let swipeDelete = UIContextualAction(style: .normal, title: "Уволить") { action, view, succes in
+            print("swipe")
+            self.arrayWorker.remove(at: indexPath.row)
+            self.table.reloadData()
+        }
+        swipeDelete.backgroundColor = .red
+        swipeDelete.image = UIImage(named: "3")
+        return UISwipeActionsConfiguration(actions: [swipeDelete])
     }
 }
 

@@ -56,6 +56,7 @@ class SecondViewController: UIViewController {
         button.addTarget(self, action: #selector(buttonMov), for: .touchUpInside)
         button.addTarget(self, action: #selector(changeButtonColor), for: .touchUpInside)
         view.addSubview(button)
+        
      }
     
     @objc func buttonMov () {
@@ -65,6 +66,7 @@ class SecondViewController: UIViewController {
         delegate1?.appendArrayWorker(parametr1: name!, parametr2: status!)
         
         print("1")
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func changeButtonColor () {
